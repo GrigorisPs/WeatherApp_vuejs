@@ -4,7 +4,7 @@
 
       <input v-model="searchQuery" @input="getSeatchResults" type="text" placeholder="Search for a city or state" class=" py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none
       focus:shadow-[0px_1px_0_0_#004E71]">
-      
+
       <ul v-if="mapboxResults" class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
 
         <!-- In case of Data not found -->
@@ -15,7 +15,8 @@
 
         <!-- Else statement -->
         <template v-else>
-          <li v-for="searchResult in mapboxResults " :key="searchResult.id" class="py-2 cursor-pointer">
+          <li v-for="searchResult in mapboxResults " :key="searchResult.id" class="py-2 cursor-pointer"
+            @click="previewCity(searchResult)">
             {{ searchResult.place_name }}
           </li>
         </template>
@@ -27,6 +28,24 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const previewCity = (searchResult) => {
+  console.log(searchResult)
+  const [city, state] = searchResult.place_name.split(",")
+  router.push({
+    name: 'cityView',
+    params: { state: state.replaceAll(" ", ""), city: city },
+    query: {
+      lat: searchResult.geometry.coordinates[1],
+      lng: searchResult.geometry.coordinates[0],
+      preview: true,
+    }
+
+  })
+
+}
 
 const mapboxAPIKey = 'pk.eyJ1IjoiZ3JpZ29yaXNwcyIsImEiOiJjbG5oZnZncW4wcG5qMmlydXZqY2phN2cwIn0.WiSijdAPnlMWS0hRdrJRmQ'
 const searchQuery = ref("")
