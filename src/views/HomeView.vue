@@ -16,7 +16,7 @@
         <!-- Else statement -->
         <template v-else>
           <li v-for="searchResult in mapboxResults " :key="searchResult.id" class="py-2 cursor-pointer"
-            @click="previewCity(searchResult)">
+            @click="previewCity(searchResult)"> 
             {{ searchResult.place_name }}
           </li>
         </template>
